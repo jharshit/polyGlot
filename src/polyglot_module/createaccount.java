@@ -81,8 +81,8 @@ public class createaccount extends JFrame
         panel_createaccount.add(btn_continue).setBounds(95, 120,100, 20);
         getContentPane().add(panel_createaccount).setBounds(60, 160, 302, 158);
         
-        img_appimage.setIcon(new javax.swing.ImageIcon("C:\\Users\\Harshit\\Documents\\NetBeansProjects\\create_account.jpg"));
-        img_appimage.setText("createaccount_image");
+        img_appimage.setIcon(new javax.swing.ImageIcon(getClass().getClassLoader().getResource("resource/create_account.jpg")));
+        //img_appimage.setText("createaccount_image");
         getContentPane().add(img_appimage).setBounds(0, 0, 436, 389);
         
         btn_continue.addActionListener(new java.awt.event.ActionListener() {

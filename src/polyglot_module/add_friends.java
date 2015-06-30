@@ -57,8 +57,8 @@ public class add_friends extends JFrame{
         panel_addfriend.add(btn_skip).setBounds(180, 120,100, 20);
         getContentPane().add(panel_addfriend).setBounds(60, 120, 302, 158);
         
-        img_appimage.setIcon(new javax.swing.ImageIcon("C:\\Users\\Nitin\\Desktop\\create_account.jpg"));
-        img_appimage.setText("createaccount_image");
+        img_appimage.setIcon(new javax.swing.ImageIcon(getClass().getClassLoader().getResource("resource/create_account.jpg")));
+        //img_appimage.setText("createaccount_image");
         getContentPane().add(img_appimage).setBounds(0, 0, 436, 389);
         
         setSize(436,389);

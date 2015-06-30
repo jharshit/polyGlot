@@ -61,7 +61,7 @@ public class chat_room extends JFrame{
         btn_send.setText("Send");
         getContentPane().add(btn_send).setBounds(165, 290, 90, 20);
         
-        img_appimage.setIcon(new javax.swing.ImageIcon("C:\\Users\\Harshit\\Documents\\NetBeansProjects\\create_account.jpg"));
+        img_appimage.setIcon(new javax.swing.ImageIcon(getClass().getClassLoader().getResource("resource/create_account.jpg")));
         //img_appimage.setText("createaccount_image");
         getContentPane().add(img_appimage).setBounds(0, 0, 436, 389);
         
