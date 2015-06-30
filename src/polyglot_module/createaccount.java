@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 public class createaccount extends JFrame 
 {
     javax.swing.JLabel lbl_appname;
+    javax.swing.JLabel lbl_trademark;
     javax.swing.JLabel lbl_tagline;
     javax.swing.JSeparator seperation;
     javax.swing.JLabel lbl_createaccountname;
@@ -27,6 +28,7 @@ public class createaccount extends JFrame
     public createaccount()
     {
         lbl_appname = new javax.swing.JLabel();
+        lbl_trademark=new javax.swing.JLabel();
         lbl_tagline = new javax.swing.JLabel();
         seperation = new javax.swing.JSeparator();
         lbl_createaccountname = new javax.swing.JLabel();
@@ -45,6 +47,11 @@ public class createaccount extends JFrame
         lbl_appname.setForeground(new java.awt.Color(255, 255, 255));
         lbl_appname.setText("polyGlot");
         getContentPane().add(lbl_appname).setBounds(160, 20, 93, 34);
+        
+        lbl_trademark.setFont(new java.awt.Font("Comic Sans MS", 1, 7)); 
+        lbl_trademark.setForeground(new java.awt.Color(255, 255, 255));
+        lbl_trademark.setText("TM");
+        getContentPane().add(lbl_trademark).setBounds(255, 15, 40, 30);
         
         lbl_tagline.setFont(new java.awt.Font("Edwardian Script ITC", 0, 36));
         lbl_tagline.setForeground(new java.awt.Color(255, 255, 255));
