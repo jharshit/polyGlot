@@ -63,8 +63,8 @@ public class createaccount extends JFrame
         
         lbl_createaccountname.setFont(new java.awt.Font("Tahoma", 1, 14));
         lbl_createaccountname.setForeground(new java.awt.Color(255, 255, 255));
-        lbl_createaccountname.setText("create an account");
-        getContentPane().add(lbl_createaccountname).setBounds(50, 120, 123, 17);
+        lbl_createaccountname.setText("Create an account");
+        getContentPane().add(lbl_createaccountname).setBounds(50, 120, 128, 19);
 
         panel_createaccount.setLayout(null);
 
@@ -75,11 +75,11 @@ public class createaccount extends JFrame
         btn_continue.setText("Continue");
         
         panel_createaccount.add(txt_username).setBounds(25, 35,140, 20);
-        panel_createaccount.add(lbl_username).setBounds(190, 35,140, 20);
+        panel_createaccount.add(lbl_username).setBounds(200, 35,140, 20);
         panel_createaccount.add(txt_emailid).setBounds(25, 80,140, 20);
-        panel_createaccount.add(lbl_emailid).setBounds(190, 80,140, 20);
+        panel_createaccount.add(lbl_emailid).setBounds(200, 80,140, 20);
         panel_createaccount.add(btn_continue).setBounds(95, 120,100, 20);
-        getContentPane().add(panel_createaccount).setBounds(50, 150, 302, 158);
+        getContentPane().add(panel_createaccount).setBounds(60, 160, 302, 158);
         
         img_appimage.setIcon(new javax.swing.ImageIcon("C:\\Users\\Harshit\\Documents\\NetBeansProjects\\create_account.jpg"));
         img_appimage.setText("createaccount_image");
