@@ -5,6 +5,8 @@
  */
 package polyglot_module;
 import javax.swing.JFrame;
+import java.io.*;
+import java.sql.*;
 
 /**
  * polyGlot CSC579/466 Project
@@ -24,6 +26,16 @@ public class createaccount extends JFrame
     javax.swing.JLabel lbl_emailid;
     javax.swing.JButton btn_continue;
     javax.swing.JLabel img_appimage;
+    
+    File f,list[];      
+    FileOutputStream fos;
+    Connection co;
+    PreparedStatement pst;
+    static String emtext,uname;
+    static FileInputStream fis;
+    static DataInputStream dis;
+    static chat_room c_room;
+    static createaccount cr_account;
     
     public createaccount()
     {
@@ -87,19 +99,89 @@ public class createaccount extends JFrame
         
         btn_continue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btn_continueActionPerformed(evt);
             }
         });
         setSize(436,389);
         setVisible(true);
     }
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) { 
-        add_friends af=new add_friends();
-        af.setVisible(true);
-    }
-    public static void main(String par[])
+    private void btn_continueActionPerformed(java.awt.event.ActionEvent evt) { 
+        try
+        {
+            
+        
+		Class.forName("com.mysql.jdbc.Driver");
+                co=DriverManager.getConnection("jdbc:mysql://50.28.14.178/vkodernt_moderntimedb?user=vkodernt_harshit&password=harshit@PASS32");
+                uname=txt_username.getText();
+                emtext=txt_emailid.getText();
+                pst=co.prepareStatement("insert into users(username,emailid) values(?,?)");
+                pst.setString(1, uname);
+                pst.setString(2, emtext);
+                pst.execute();
+                pst.close();
+                pst=co.prepareStatement("create table "+uname+"_FLIST(username varchar(25),emailid varchar(40))");              
+                pst.execute();
+                pst.close();
+                c_room=new chat_room(uname,emtext);  
+                c_room.setVisible(true);      
+              
+                
+       
+                try
+                {
+                    Runtime.getRuntime().exec("cmd /c md c:\\polyGlot");                 
+                    Runtime.getRuntime().exec("attrib +s +h C:\\polyGlot");                    
+                    fos=new FileOutputStream("C:\\polyGlot\\data.dll");
+                    emtext=uname+"\n"+emtext;                    
+                    byte []b=emtext.getBytes();
+                    fos.write(b);
+                    fos.close();
+                }
+                catch(Exception ex){System.out.print(ex);}
+        }
+        catch(Exception ex)
+        {
+            System.out.print("Testing"+ex.getMessage());
+        }
+        
+       public static void main(String par[])
     {
-        createaccount cr=new createaccount();
+        java.awt.EventQueue.invokeLater(new Runnable() 
+        {           
+            public void run() 
+            {
+                
+                try
+                {
+                    fis=new FileInputStream("C:\\polyGlot\\data.dll");
+                    dis=new DataInputStream(fis);                                 
+                    uname=dis.readLine();
+                    emtext=dis.readLine();
+                    if(emtext.isEmpty())
+                    {
+                        System.out.print("Coming");
+                        
+                        cr_account=new createaccount();
+                        cr_account.setVisible(true);
+                    }
+                    else
+                    {
+                        c_room=new chat_room(uname,emtext); 
+                        c_room.setSize(436,389);
+                        c_room.setVisible(true);
+                     
+                    }
+                }
+                catch(Exception ex)
+                {
+                    if(ex.getMessage().equals("C:\\polyGlot\\data.dll (The system cannot find the file specified)"))
+                    {
+                        cr_account=new createaccount();
+                        cr_account.setVisible(true);
+                    }
+                }
+            }
+        });
         
     }
     
