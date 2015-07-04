@@ -5,6 +5,9 @@
  */
 package polyglot_module;
 import javax.swing.JFrame;
+import java.io.*;
+import java.sql.*;
+import javax.swing.JOptionPane; 
 /**
  * polyGlot CSC579/466 Project
  *Team Members : Harshit Jain & Nitin Goyal
@@ -20,8 +23,14 @@ public class add_friends extends JFrame{
     javax.swing.JButton btn_skip;
     javax.swing.JLabel img_appimage;
     
-    public add_friends()
+    ResultSet rs;
+    String uname,emtext;
+    PreparedStatement pst;
+    Connection co;
+    public add_friends(String uname,String emtext)
     {
+        this.uname=uname;
+        this.emtext=emtext;
         lbl_addfriend = new javax.swing.JLabel();
         panel_addfriend = new javax.swing.JPanel();
         txt_username = new javax.swing.JTextField();
@@ -63,9 +72,92 @@ public class add_friends extends JFrame{
         
         setSize(436,389);
         setVisible(true);
+    
+    btn_continue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+    btn_skip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        
     }
-    public static void main(String par[])
+
+        public void jButton1ActionPerformed(java.awt.event.ActionEvent evt)     
+        { 
+          
+        try
+        {
+            
+            Class.forName("com.mysql.jdbc.Driver");
+            co=DriverManager.getConnection("jdbc:mysql://50.28.14.178/vkodernt_moderntimedb?user=vkodernt_harshit&password=harshit@PASS32");		  
+            pst=co.prepareStatement("select * from users where username=?");
+            pst.setString(1,txt_username.getText());
+            rs=pst.executeQuery();
+            boolean flag=false;
+            while(rs.next())
+            {
+                flag=true;
+            }
+                if(flag==false)
+                {
+                    JOptionPane.showMessageDialog(this, "Sorry! Given user id is not registered in polyGlot","Information",JOptionPane.INFORMATION_MESSAGE);
+                    
+                }
+                else
+                {
+                    //Friend List first
+                    try
+                    {
+                    pst.close();
+                    pst=co.prepareStatement("insert into "+uname+"_FLIST(username,emailid) values(?,?)");                    
+                    pst.setString(1,txt_username.getText());
+                    pst.setString(2, txt_emailid.getText());
+                    pst.execute();                 
+                    pst.close();
+                    
+                   //Friend List Second
+                  
+                    pst=co.prepareStatement("insert into "+txt_username.getText()+"_FLIST(username,emailid) values(?,?)");                    
+                    pst.setString(1, uname);
+                    pst.setString(2, emtext);
+                    pst.execute();                  
+                    JOptionPane.showMessageDialog(this, "Given Friend is successfully added","Information",JOptionPane.INFORMATION_MESSAGE);
+                    pst.close();
+                    
+                    //Create table for friend msg
+                    
+                    pst=co.prepareStatement("create table "+uname+"_"+txt_username.getText()+"t(msg text,msg_type varchar(10))");                    
+                    pst.execute();       
+                    pst.close();
+                    
+                    //Create table for friend msg in revsers
+                    
+                    pst=co.prepareStatement("create table "+txt_username.getText()+"_"+uname+"t(msg text,msg_type varchar(10))");                    
+                    pst.execute();
+                    }                    
+                    catch(Exception ex)
+                    {
+                     JOptionPane.showMessageDialog(this, "Given Friend is already Added","Information",JOptionPane.INFORMATION_MESSAGE);   
+                    }
+                }
+                pst.close();
+              
+        }
+        catch(Exception ex)
+        {
+           System.out.print(ex.getMessage());
+        }
+            
+    }
+    public void jButton2ActionPerformed(java.awt.event.ActionEvent evt)
     {
-     add_friends af=new add_friends(); 
+        chat_room ch=new chat_room("","");
+        ch.setSize(436,389);
+        ch.setVisible(true);
     }
 }
+
