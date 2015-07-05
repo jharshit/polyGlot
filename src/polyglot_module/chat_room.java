@@ -4,7 +4,12 @@
  * and open the template in the editor.
  */
 package polyglot_module;
+import java.sql.DriverManager;
 import javax.swing.JFrame;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 /**
  * polyGlot CSC579/466 Project
@@ -18,25 +23,30 @@ public class chat_room extends JFrame{
     java.awt.Choice choice_selectlanguage;
     javax.swing.JScrollPane chat_panel;
     javax.swing.JTextArea chat_textarea;
-    javax.swing.JTextField txt_chatwrite;
+    javax.swing.JTextArea txt_chatwrite;
     javax.swing.JButton btn_send;
     javax.swing.JLabel img_appimage;
     
-    public chat_room()
+    String uname,emtext;
+    Connection co;
+    PreparedStatement pst;
+    ResultSet rs;
+    public chat_room(String uname,String emtext)
     {
+        this.uname=uname;
+        this.emtext=emtext;
         lbl_chatroom = new javax.swing.JLabel();
         btn_addfriend = new javax.swing.JButton();
         choice_selectfriend = new java.awt.Choice();
         choice_selectlanguage = new java.awt.Choice();
         chat_panel = new javax.swing.JScrollPane();
         chat_textarea = new javax.swing.JTextArea();
-        txt_chatwrite = new javax.swing.JTextField();
+        txt_chatwrite = new javax.swing.JTextArea();
         btn_send = new javax.swing.JButton();
         img_appimage = new javax.swing.JLabel();
         
-        choice_selectfriend.add("Select Friend");
         choice_selectlanguage.add("Select Language");
-        
+       
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
@@ -70,14 +80,45 @@ public class chat_room extends JFrame{
                 jButton2ActionPerformed(evt);
             }
         });
+        
+         btn_send.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendActionPerformed(evt);
+            }
+        });
+        // Retrieve list of all friends in dropdown.
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+            co=DriverManager.getConnection("jdbc:mysql://50.28.14.178/vkodernt_moderntimedb?user=vkodernt_harshit&password=harshit@PASS32");
+            pst=co.prepareStatement("select distinct username,emailid from "+uname+"_FLIST");               
+            rs=pst.executeQuery();
+            choice_selectfriend.removeAll();
+            choice_selectfriend.add("Select Friend");
+            while(rs.next())
+            {
+               choice_selectfriend.add(rs.getString("username")); 
+            }
+            pst.close(); 
+        }
+        catch(Exception ex)
+        {
+            System.out.print(ex);
+        }
+        
     }
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) { 
-        add_friends af=new add_friends();
+   
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+        add_friends af=new add_friends(uname,emtext);
         af.setVisible(true);
+    }
+    private void  sendActionPerformed(java.awt.event.ActionEvent evt)
+    {
+         
     }
     public static void main(String par[])
     {
-        chat_room cr=new chat_room();
+        chat_room cr=new chat_room("","");
         cr.setSize(436,389);
         cr.setVisible(true);
     }
