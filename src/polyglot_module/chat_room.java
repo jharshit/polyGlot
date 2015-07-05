@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package polyglot_module;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.DriverManager;
 import javax.swing.JFrame;
 import java.sql.Connection;
@@ -114,6 +116,35 @@ public class chat_room extends JFrame{
     }
     private void  sendActionPerformed(java.awt.event.ActionEvent evt)
     {
+        try
+        {               
+               String user=choice_selectfriend.getSelectedItem();
+               
+               if(co.isClosed())
+               co=DriverManager.getConnection("jdbc:mysql://50.28.14.178/vkodernt_moderntimedb?user=vkodernt_harshit&password=harshit@PASS32");
+               pst=co.prepareStatement("insert into "+uname+"_"+user+"t(msg,msg_type,status) values(?,?,?)");                                
+               
+               pst.setString(1, txt_chatwrite.getText());
+               pst.setString(2, "sent");
+               pst.setString(3,"not");
+               pst.execute();               
+               pst.close();
+               chat_textarea.append("Me: "+txt_chatwrite.getText()+String.valueOf((char)10));
+                
+               pst=co.prepareStatement("insert into "+user+"_"+uname+"t(msg,msg_type,status) values(?,?,?)");                                
+               
+               pst.setString(1, txt_chatwrite.getText());
+               pst.setString(2, "receive");
+               pst.setString(3,"not");
+               pst.execute();               
+               pst.close();
+               txt_chatwrite.setText("");
+          
+        }
+        catch(Exception ex)
+        {
+            System.out.print(ex);
+        }
          
     }
     public static void main(String par[])
