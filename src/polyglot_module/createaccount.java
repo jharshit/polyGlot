@@ -119,7 +119,7 @@ public class createaccount extends JFrame
                 pst.setString(2, emtext);
                 pst.execute();
                 pst.close();
-                pst=co.prepareStatement("create table "+uname+"_FLIST(username varchar(25),emailid varchar(40))");              
+                pst=co.prepareStatement("create table "+uname+"_FLIST(username varchar(25) primary key,emailid varchar(40))");              
                 pst.execute();
                 pst.close();
                 c_room=new chat_room(uname,emtext);  
@@ -144,7 +144,10 @@ public class createaccount extends JFrame
             System.out.print("Testing"+ex.getMessage());
         }
         
-       public static void main(String par[])
+        
+       
+    }
+    public static void main(String par[])
     {
         java.awt.EventQueue.invokeLater(new Runnable() 
         {           
