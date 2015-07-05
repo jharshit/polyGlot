@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.Timer;
 
 /**
  * polyGlot CSC579/466 Project
@@ -33,6 +34,7 @@ public class chat_room extends JFrame{
     Connection co;
     PreparedStatement pst;
     ResultSet rs;
+    Timer t;
     public chat_room(String uname,String emtext)
     {
         this.uname=uname;
@@ -107,6 +109,36 @@ public class chat_room extends JFrame{
                choice_selectfriend.add(rs.getString("username")); 
             }
             pst.close(); 
+        //Receiving the message
+        
+        ActionListener ac=new ActionListener()
+        {                                                   
+            public void actionPerformed(ActionEvent ex)
+            {
+                String id,nm,type,user=choice_selectfriend.getSelectedItem();
+                              
+                try
+                {
+                    if(co.isClosed())
+                    co=DriverManager.getConnection("jdbc:mysql://50.28.14.178/vkodernt_moderntimedb?user=vkodernt_harshit&password=harshit@PASS32");
+                    pst=co.prepareStatement("select * from "+uname+"_"+user+"t where status='not' and msg_type='receive'");               
+                    rs=pst.executeQuery();
+                    while(rs.next())
+                    {
+                       chat_textarea.append(user+": "+rs.getString("msg")+String.valueOf((char)10));
+                    }                                           
+                    pst.close();
+                    pst=co.prepareStatement("update "+uname+"_"+user+"t set status='read' where msg_type='receive'");               
+                    pst.execute();
+                }
+                catch(Exception e)
+                {
+                    System.out.print(e.getMessage());
+                }
+                
+            }
+        };
+        t=new Timer(5000,ac);
         }
         catch(Exception ex)
         {
@@ -116,6 +148,7 @@ public class chat_room extends JFrame{
     }
     private void  choice_selectfriendItemStateChanged(java.awt.event.ItemEvent evt)
     {
+        t.start();
     }
    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,13 +180,11 @@ public class chat_room extends JFrame{
                pst.execute();               
                pst.close();
                txt_chatwrite.setText("");
-          
         }
         catch(Exception ex)
         {
             System.out.print(ex);
         }
-         
     }
     public static void main(String par[])
     {
