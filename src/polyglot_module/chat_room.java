@@ -88,6 +88,11 @@ public class chat_room extends JFrame{
                 sendActionPerformed(evt);
             }
         });
+        choice_selectfriend.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                choice_selectfriendItemStateChanged(evt);
+            }
+        });
         // Retrieve list of all friends in dropdown.
         try
         {
@@ -108,6 +113,9 @@ public class chat_room extends JFrame{
             System.out.print(ex);
         }
         
+    }
+    private void  choice_selectfriendItemStateChanged(java.awt.event.ItemEvent evt)
+    {
     }
    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
