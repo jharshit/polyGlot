@@ -93,7 +93,8 @@ public class createaccount extends JFrame
         panel_createaccount.add(btn_continue).setBounds(95, 120,100, 20);
         getContentPane().add(panel_createaccount).setBounds(60, 160, 302, 158);
         
-        img_appimage.setIcon(new javax.swing.ImageIcon(getClass().getClassLoader().getResource("resource/create_account.jpg")));
+        //img_appimage.setIcon(new javax.swing.ImageIcon(getClass().getClassLoader().getResource("resource/create_account.jpg")));
+        img_appimage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/create_account.jpg")));
         //img_appimage.setText("createaccount_image");
         getContentPane().add(img_appimage).setBounds(0, 0, 436, 389);
         
@@ -111,10 +112,10 @@ public class createaccount extends JFrame
             
         
 		Class.forName("com.mysql.jdbc.Driver");
-                co=DriverManager.getConnection("jdbc:mysql://50.28.14.178/vkodernt_moderntimedb?user=vkodernt_harshit&password=harshit@PASS32");
+                co=DriverManager.getConnection("jdbc:mysql://50.28.14.178/vkodernt_moderntimedb?autoReconnect=true&characterSetResults=UTF-8&characterEncoding=UTF-8&useUnicode=yes&user=vkodernt_harshit&password=harshit@PASS32");
                 uname=txt_username.getText();
                 emtext=txt_emailid.getText();
-                pst=co.prepareStatement("insert into users(username,emailid) values(?,?)");
+                pst=co.prepareStatement("insert into users(username,emailid,language) values(?,?,'en')");
                 pst.setString(1, uname);
                 pst.setString(2, emtext);
                 pst.execute();
@@ -122,8 +123,10 @@ public class createaccount extends JFrame
                 pst=co.prepareStatement("create table "+uname+"_FLIST(username varchar(25) primary key,emailid varchar(40))");              
                 pst.execute();
                 pst.close();
-                c_room=new chat_room(uname,emtext);  
-                c_room.setVisible(true);      
+                c_room=new chat_room(uname,emtext);
+                c_room.setSize(436,389);
+                c_room.setVisible(true);    
+                cr_account.setVisible(false);
               
                 
        
@@ -162,14 +165,13 @@ public class createaccount extends JFrame
                     emtext=dis.readLine();
                     if(emtext.isEmpty())
                     {
-                        System.out.print("Coming");
-                        
                         cr_account=new createaccount();
                         cr_account.setVisible(true);
                     }
                     else
                     {
                         c_room=new chat_room(uname,emtext); 
+                       
                         c_room.setSize(436,389);
                         c_room.setVisible(true);
                      
@@ -177,7 +179,6 @@ public class createaccount extends JFrame
                 }
                 catch(Exception ex)
                 {
-                    if(ex.getMessage().equals("C:\\polyGlot\\data.dll (The system cannot find the file specified)"))
                     {
                         cr_account=new createaccount();
                         cr_account.setVisible(true);
