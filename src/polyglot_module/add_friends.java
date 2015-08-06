@@ -7,7 +7,8 @@ package polyglot_module;
 import javax.swing.JFrame;
 import java.io.*;
 import java.sql.*;
-import javax.swing.JOptionPane; 
+import javax.swing.JOptionPane;
+import java.util.*;
 /**
  * polyGlot CSC579/466 Project
  *Team Members : Harshit Jain & Nitin Goyal
@@ -27,6 +28,8 @@ public class add_friends extends JFrame{
     String uname,emtext;
     PreparedStatement pst;
     Connection co;
+    createaccount cr_account;
+    java.util.Date dt2,dt3;
     public add_friends(String uname,String emtext)
     {
         this.uname=uname;
@@ -66,7 +69,7 @@ public class add_friends extends JFrame{
         panel_addfriend.add(btn_skip).setBounds(180, 120,100, 20);
         getContentPane().add(panel_addfriend).setBounds(60, 120, 302, 158);
         
-        img_appimage.setIcon(new javax.swing.ImageIcon(getClass().getClassLoader().getResource("resource/create_account.jpg")));
+        img_appimage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/create_account.jpg")));
         //img_appimage.setText("createaccount_image");
         getContentPane().add(img_appimage).setBounds(0, 0, 436, 389);
         
@@ -91,9 +94,9 @@ public class add_friends extends JFrame{
           
         try
         {
-            
+            dt2=new java.util.Date();
             Class.forName("com.mysql.jdbc.Driver");
-            co=DriverManager.getConnection("jdbc:mysql://50.28.14.178/vkodernt_moderntimedb?user=vkodernt_harshit&password=harshit@PASS32");		  
+            co=DriverManager.getConnection("jdbc:mysql://50.28.14.178/vkodernt_moderntimedb?autoReconnect=true&characterSetResults=UTF-8&characterEncoding=UTF-8&useUnicode=yes&user=vkodernt_harshit&password=harshit@PASS32");
             pst=co.prepareStatement("select * from users where username=?");
             pst.setString(1,txt_username.getText());
             rs=pst.executeQuery();
@@ -109,6 +112,7 @@ public class add_friends extends JFrame{
                 }
                 else
                 {
+                    
                     //Friend List first
                     try
                     {
@@ -128,16 +132,21 @@ public class add_friends extends JFrame{
                     JOptionPane.showMessageDialog(this, "Given Friend is successfully added","Information",JOptionPane.INFORMATION_MESSAGE);
                     pst.close();
                     
+                    
+                    dt3=new java.util.Date();
+                    System.out.println("\n time taken to add friend \n" +(dt3.getTime()-dt2.getTime())+" ms.");
                     //Create table for friend msg
                     
-                    pst=co.prepareStatement("create table "+uname+"_"+txt_username.getText()+"t(msg text,msg_type varchar(10))");                    
+                    pst=co.prepareStatement("create table "+uname+"_"+txt_username.getText()+"t(msg text,msg_type varchar(10),status varchar(5)) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");                    
                     pst.execute();       
                     pst.close();
                     
                     //Create table for friend msg in revsers
                     
-                    pst=co.prepareStatement("create table "+txt_username.getText()+"_"+uname+"t(msg text,msg_type varchar(10))");                    
+                    pst=co.prepareStatement("create table "+txt_username.getText()+"_"+uname+"t(msg text,msg_type varchar(10),status varchar(5)) DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");                    
                     pst.execute();
+                    txt_username.setText("");
+                    txt_emailid.setText("");
                     }                    
                     catch(Exception ex)
                     {
@@ -155,9 +164,11 @@ public class add_friends extends JFrame{
     }
     public void jButton2ActionPerformed(java.awt.event.ActionEvent evt)
     {
-        chat_room ch=new chat_room("","");
+       chat_room ch=new chat_room(uname,emtext);
         ch.setSize(436,389);
         ch.setVisible(true);
+       
+       setVisible(false);
     }
 }
 
